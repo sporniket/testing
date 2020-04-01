@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>com.sporniket.testing</groupId>
 		<artifactId>sporniket-testing</artifactId>
-		<version>20.04.00-SNAPSHOT</version>
+		<version>20.04.00</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
