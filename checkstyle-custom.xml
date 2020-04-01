@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE module PUBLIC
+    "-//Puppy Crawl//DTD Check Configuration 1.2//EN"
+    "http://www.puppycrawl.com/dtds/configuration_1_2.dtd">
+
+<!--
+
+  Checkstyle configuration that checks the naming conventions.
+  This version allows namespace, and relax naming for interfaces and abstract classes.
+  
+  portion namespace de fonction
+  ((((get)|(set)|([a-z][a-z0-9]*))([A]?[A-Z][a-z0-9]+)*)?__)?
+
+  portion namespace fonctionnel
+  ((([A-Z][A-Z0-9]*)(_[A_Z0-9]+)*)__)*
+
+-->
+
+<module name="Checker">
+	<module name="TreeWalker">
+		<!-- 
+		================> Nom de variable <================
+		 -->
+
+		<!-- 
+			Variable locale
+		 -->
+		<!-- Cas general -->
+		<module name="LocalFinalVariableName">
+			<property name="format" value="^(_[a-z][a-z0-9]*)([A-Z][a-z0-9]+)*$"/>
+			<property name="tokens" value="VARIABLE_DEF"/>
+		</module>
+		<module name="LocalVariableName">
+			<property name="format" value="^(_[a-z][a-z0-9]*)([A-Z][a-z0-9]+)*$"/>
+			<property name="tokens" value="VARIABLE_DEF"/>
+		</module>
+
+		<!-- Cas des exceptions -->
+		<module name="LocalFinalVariableName">
+			<property name="format" value="^_exception(_[a-z0-9]*)*$"/>
+			<property name="tokens" value="VARIABLE_DEF"/>
+		</module>
+		<module name="LocalVariableName">
+			<property name="format" value="^_exception(_[a-z0-9]*)*$"/>
+			<property name="tokens" value="VARIABLE_DEF"/>
+		</module>
+
+		<!-- 
+			Paramètre d'une fonction
+			
+			Note : le "[A]?" prend en compte le cas du "a" qui est un mot, 
+			par exemple "takeAChance" sera autorisé.
+			Pour supporter le "d'" français, remplacer "[A]?" par "[AD]?"
+		 -->
+		<module name="ParameterName">
+			<property name="format" value="^([a-z][a-z0-9]*)([A]?[A-Z][a-z0-9]+)*$"/>
+		</module>
+
+		<!-- 
+			Variable d'instance
+		 -->
+		<module name="MemberName">
+			<property name="format" value="^(__)?my([A-Z][a-z0-9]*)+$"/>
+		</module>
+
+		<!-- 
+			Variable de classe modifiable
+		 -->
+		<module name="StaticVariableName">
+			<property name="format" value="^(__)?the([A-Z][a-z0-9]*)+$"/>
+		</module>
+
+		<!-- 
+			Variable de classe constante
+		 -->
+		<module name="ConstantName">
+			<property name="format" value="^((((get)|(set)|([a-z][a-z0-9]*))([A-Z][a-z0-9]+)*)__)*((([A-Z][A-Z0-9]*)(_[A-Z0-9]+)*)__)*([A-Z][A-Z0-9]*)(_[A-Z0-9]+)*$"/>
+		</module>
+		
+		<!-- 
+		================> Nom de type <================
+		 -->
+
+		<!-- 
+			Les paquetages
+		 -->
+		<module name="PackageName">
+			<property name="format" value="^([a-z][a-z0-9]*)(\.[a-z][a-z0-9]*)*$"/>
+		</module>
+
+		<!-- 
+			Les classes
+		 -->
+		<!-- Cas general -->
+		<module name="TypeName">
+			<property name="format" value="^([A-Z][a-z0-9]*)+$"/>
+			<property name="tokens" value="CLASS_DEF"/>
+		</module>
+
+		<!-- Cas des classes abstraites -->
+		<module name="AbstractClassName">
+			<property name="format" value="^(Abstract)?([A-Z][a-z0-9]*)+$"/>
+			<!-- ignore, otherwise any class must be declared abstract... -->
+			<property name="severity" value="ignore"/>
+		</module>
+
+		<!-- Cas des interfaces -->
+		<module name="TypeName">
+			<property name="format" value="^([A-Z][a-z0-9]*)+((able)|(Interface)|(Processor)|(Provider)|(Trait))?$"/>
+			<property name="tokens" value="INTERFACE_DEF"/>
+		</module>
+
+		<!-- 
+		================> Nom de méthode <================
+		On ne peut pas identifier tous les cas, on se contentera d'une vérification
+		du cas général, les cas particulier (hors constructeur et destructeurs) 
+		étant une spécialisation du cas général.
+		
+		On indique explicitement les "get" et "set" pour la forme mais c'est superflu.
+		
+		On tient compte des concepts qui tiennent en une lettre (X, Y, etc...)
+		 -->
+		<module name="MethodName">
+			<property name="format" value="^(__)?((((get)|(set)|([a-z][a-z0-9]*))([A]?[A-Z][a-z0-9]+)*([A-Z])?)__)*((get)|(set)|([a-z][a-z0-9]*))([A]?[A-Z][a-z0-9]+)*([A-Z])?$"/>
+		</module>
+	</module>
+</module>
