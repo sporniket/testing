@@ -4,7 +4,7 @@
 	<groupId>com.sporniket.testing</groupId>
 	<artifactId>sporniket-testing</artifactId>
 	<packaging>pom</packaging>
-	<version>20.04.00</version>
+	<version>20.04.01-SNAPSHOT</version>
 
 	<properties>
 		<url.base>https://github.com/sporniket/testing</url.base>
@@ -233,7 +233,7 @@
 	<scm>
 		<connection>scm:git:https://github.com/sporniket/testing.git</connection>
 		<url>https://github.com/sporniket/testing</url>
-		<tag>v20.04.00</tag>
+		<tag>HEAD</tag>
 	</scm>
 	<issueManagement>
 		<system>GitHub.com</system>
