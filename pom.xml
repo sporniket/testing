@@ -1,4 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.sporniket.testing</groupId>
@@ -33,12 +35,25 @@
 
 	<modules>
 		<module>./sporniket-testing-utils</module>
+		<module>./sporniket-testing-dbunit</module>
 	</modules>
+
 	<dependencyManagement>
 		<dependencies>
 			<!-- ===INTERNAL DEPENDENCIES -->
+			<dependency>
+				<groupId>com.sporniket.testing</groupId>
+				<artifactId>sporniket-testing-utils</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 
 			<!-- ===EXTERNAL DEPENDENCIES (non test) -->
+			<!-- dbunit -->
+			<dependency>
+				<groupId>org.dbunit</groupId>
+				<artifactId>dbunit</artifactId>
+				<version>2.7.0</version>
+			</dependency>
 
 			<!-- ===TEST DEPENDENCIES -->
 			<dependency>

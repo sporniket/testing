@@ -1,0 +1,63 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.sporniket.testing</groupId>
+		<artifactId>sporniket-testing</artifactId>
+		<version>20.04.01-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+
+	<artifactId>sporniket-testing-dbunit</artifactId>
+	<packaging>jar</packaging>
+
+	<name>sporniket-testing-dbunit</name>
+	<description>JUnit5 extension to use dbunit</description>
+	<url>${url.base}/blob/master/${project.artifactId}</url>
+
+	<dependencies>
+		<!-- ===INTERNAL DEPENDENCIES -->
+		<dependency>
+			<groupId>com.sporniket.testing</groupId>
+			<artifactId>sporniket-testing-utils</artifactId>
+		</dependency>
+
+		<!-- ===EXTERNAL DEPENDENCIES (non test) -->
+		<dependency>
+			<groupId>org.dbunit</groupId>
+			<artifactId>dbunit</artifactId>
+		</dependency>
+
+		<!-- ===TEST DEPENDENCIES -->
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		<!-- bdd assertions -->
+		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+		</dependency>
+	</dependencies>
+	<build>
+		<plugins>
+			<!-- Version of Java supported -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${version.maven-compiler-plugin}</version>
+				<configuration>
+					<source>${version.jdk}</source>
+					<target>${version.jdk}</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	<distributionManagement>
+		<site>
+			<id>localMvnSite-${project.artifactId}</id>
+			<name>Sporniket Java Core Library - ${project.name}</name>
+			<url>${url.base.site.deploy}/${project.parent.artifactId}/${project.version}/module/${project.artifactId}</url>
+		</site>
+	</distributionManagement>
+</project>
