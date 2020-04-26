@@ -47,6 +47,7 @@ import org.slf4j.LoggerFactory;
  * <li>driverClass : jdbc url, e.g. 'org.postgresql.Driver'.</li>
  * <li>username : name of the database user, should have access to the schema.</li>
  * <li>password : password for the database user.</li>
+ * <li>schema : name of the schema to use.</li>
  * </ul>
  *
  * <p>
@@ -97,7 +98,9 @@ import org.slf4j.LoggerFactory;
 public class DbUnitExtensionSimplyDestructive
 		implements BeforeAllCallback, BeforeEachCallback, AfterAllCallback, AfterEachCallback, TestExecutionExceptionHandler
 {
-	private static Connection con;
+	private static Connection con = null;
+
+	private static Properties setupProps = null;
 
 	private static final String DATASET_XML__MAIN = "dataset.xml";
 
@@ -105,22 +108,32 @@ public class DbUnitExtensionSimplyDestructive
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DbUnitExtensionSimplyDestructive.class);
 
+	public static synchronized Properties getConfiguration() throws IOException
+	{
+		if (null == setupProps)
+		{
+			Properties _setupProps = new Properties();
+			_setupProps.load(DbUnitExtensionSimplyDestructive.class.getResourceAsStream("/dbunit.properties"));
+			setupProps = _setupProps;
+		}
+		return setupProps;
+	}
+
 	public static synchronized Connection getConnection()
 			throws IOException, ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException
 	{
 		if (con == null)
 		{
-			Properties setupProps = new Properties();
-			setupProps.load(DbUnitExtensionSimplyDestructive.class.getResourceAsStream("/dbunit.properties"));
+			Properties _setupProps = getConfiguration();
 
 			Properties connProps = new Properties();
-			connProps.put("user", setupProps.getProperty("username"));
-			connProps.put("password", setupProps.getProperty("password"));
+			connProps.put("user", _setupProps.getProperty("username"));
+			connProps.put("password", _setupProps.getProperty("password"));
 
 			// create connection
-			Driver driver = (Driver) Class.forName(setupProps.getProperty("driverClass")).getConstructor().newInstance();
-			con = driver.connect(setupProps.getProperty("url"), connProps);
+			Driver driver = (Driver) Class.forName(_setupProps.getProperty("driverClass")).getConstructor().newInstance();
+			con = driver.connect(_setupProps.getProperty("url"), connProps);
 		}
 		return con;
 	}
@@ -141,10 +154,12 @@ public class DbUnitExtensionSimplyDestructive
 
 	private FlatXmlDataSet mainDataSet = null;
 
+	private String schemaName = null;
+
 	@Override
 	public void afterAll(ExtensionContext context) throws Exception
 	{
-		LOGGER.debug("DbUnitExtensionByPmex -- afterAll");
+		LOGGER.debug("DbUnitExtensionSimplyDestructive -- afterAll");
 		if (con != null)
 		{
 			LOGGER.debug("Release connexion");
@@ -158,14 +173,14 @@ public class DbUnitExtensionSimplyDestructive
 	@Override
 	public void afterEach(ExtensionContext context) throws Exception
 	{
-		LOGGER.debug("DbUnitExtensionByPmex -- afterEach");
+		LOGGER.debug("DbUnitExtensionSimplyDestructive -- afterEach");
 		doRollback();
 	}
 
 	@Override
 	public void beforeAll(ExtensionContext context) throws Exception
 	{
-		LOGGER.debug("DbUnitExtensionByPmex -- beforeAll");
+		LOGGER.debug("DbUnitExtensionSimplyDestructive -- beforeAll");
 		LOGGER.debug("Load general dataset if exists");
 		final Optional<Class<?>> _testClass = context.getTestClass();
 		if (_testClass.isPresent())
@@ -179,14 +194,15 @@ public class DbUnitExtensionSimplyDestructive
 		}
 		LOGGER.debug("Establish connection");
 		con = getConnection();
-		dbUnitConnection = new DatabaseConnection(con, "pmex");
+		schemaName = getConfiguration().getProperty("schema");
+		dbUnitConnection = new DatabaseConnection(con, schemaName);
 
 	}
 
 	@Override
 	public void beforeEach(ExtensionContext context) throws Exception
 	{
-		LOGGER.debug("DbUnitExtensionByPmex -- beforeEach");
+		LOGGER.debug("DbUnitExtensionSimplyDestructive -- beforeEach");
 		LOGGER.warn("display name {}", context.getDisplayName());
 		final Optional<Method> _testMethod = context.getTestMethod();
 		if (_testMethod.isPresent())
@@ -249,7 +265,7 @@ public class DbUnitExtensionSimplyDestructive
 	@Override
 	public void handleTestExecutionException(ExtensionContext context, Throwable throwable) throws Throwable
 	{
-		LOGGER.debug("DbUnitExtensionByPmex -- handleTestExecutionException");
+		LOGGER.debug("DbUnitExtensionSimplyDestructive -- handleTestExecutionException");
 		doRollback();
 		throw throwable;
 	}
