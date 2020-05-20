@@ -42,7 +42,7 @@ import java.io.InputStream;
  * <hr>
  * 
  * @author David SPORN
- * @version 20.04.02
+ * @version 20.05.00
  * @since 20.04.00
  */
 public class ResourceHelper

@@ -4,7 +4,7 @@
 	<groupId>com.sporniket.testing</groupId>
 	<artifactId>sporniket-testing</artifactId>
 	<packaging>pom</packaging>
-	<version>20.04.03-SNAPSHOT</version>
+	<version>20.05.00-SNAPSHOT</version>
 
 	<properties>
 		<url.base>https://github.com/sporniket/testing</url.base>
