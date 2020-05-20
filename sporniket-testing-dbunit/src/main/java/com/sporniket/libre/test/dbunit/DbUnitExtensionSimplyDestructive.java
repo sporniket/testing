@@ -1,5 +1,6 @@
 package com.sporniket.libre.test.dbunit;
 
+import static com.sporniket.libre.test.dbunit.DbUnitHelper.createConnection;
 import static com.sporniket.libre.test.utils.ResourceHelper.getDataResourceForClass;
 import static java.lang.String.format;
 import static org.dbunit.operation.DatabaseOperation.CLEAN_INSERT;
@@ -33,15 +34,15 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Very crude JUnit5 extension tu use dbunit, taking advantage of a non persisted database in a ditchable docker container.
- * 
+ *
  * <p>
  * DO NOT USE IF THIS EXTENSION IF YOUR BASE CONTAINS REAL DATA THAT YOU WANT TO PRESERVE
  * </p>
- * 
+ *
  * <p>
  * A <code>dbunit.properties</code> MUST be at the root of the resource folder, with the following properties :
  * </p>
- * 
+ *
  * <ul>
  * <li>url : jdbc url, e.g. 'jdbc:postgresql://localhost:54320/postgres'.</li>
  * <li>driverClass : jdbc url, e.g. 'org.postgresql.Driver'.</li>
@@ -54,43 +55,43 @@ import org.slf4j.LoggerFactory;
  * For each test class, e.g. <code>com.foo.MyTest</code>, the extension try to load the xml dataset at this location :
  * <code>classpath:/com/foo/MyTest_data/dataset.xml</code>.
  * </p>
- * 
+ *
  * <p>
  * For each test method of the test class, e.g. <code>shouldPass(...)</code>, the extension try to load the xml dataset
  * <em>dataset-[method name].xml</em> (e.g. thus at this location :
  * <code>classpath:/com/foo/MyTest_data/dataset-shouldPass.xml</code>).
  * </p>
- * 
+ *
  * <p>
  * Before each test method, the general dataset is inserted, and the specific dataset is appended.
  * </p>
- * 
- * 
- * 
+ *
+ *
+ *
  * <p>
  * &copy; Copyright 2020 David Sporn
  * </p>
  * <hr>
- * 
+ *
  * <p>
  * This file is part of <i>The Sporniket Testing Library &#8211; utils</i>.
- * 
+ *
  * <p>
  * <i>The Sporniket Testing Library &#8211; utils</i> is free software: you can redistribute it and/or modify it under the terms of
  * the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your
  * option) any later version.
- * 
+ *
  * <p>
  * <i>The Sporniket Testing Library &#8211; utils</i> is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
  * License for more details.
- * 
+ *
  * <p>
  * You should have received a copy of the GNU Lesser General Public License along with <i>The Sporniket Testing Library &#8211;
  * utils</i>. If not, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>. 2
- * 
+ *
  * <hr>
- * 
+ *
  * @author David SPORN
  * @version 20.04.02
  * @since 20.04.01
@@ -194,9 +195,9 @@ public class DbUnitExtensionSimplyDestructive
 		}
 		LOGGER.debug("Establish connection");
 		con = getConnection();
-		schemaName = getConfiguration().getProperty("schema");
-		dbUnitConnection = new DatabaseConnection(con, schemaName);
-
+		Properties configuration = getConfiguration();
+		schemaName = configuration.getProperty("schema");
+		dbUnitConnection = createConnection(con, schemaName, configuration);
 	}
 
 	@Override
